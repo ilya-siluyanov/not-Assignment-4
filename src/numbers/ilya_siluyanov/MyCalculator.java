@@ -18,6 +18,11 @@ public class MyCalculator extends Calculator {
         super(numbers);
     }
 
+
+    /**
+     * calculate the sum of all numbers from numbers list
+     * @return product of all numbers from numbers list
+     */
     @Override
     public double summarize() {
         double sum = 0.0;
@@ -27,6 +32,10 @@ public class MyCalculator extends Calculator {
         return sum;
     } //completed
 
+    /**
+     * calculate the product of all numbers from numbers list
+     * @return product of all numbers from numbers list
+     */
     @Override
     public double multiply() {
         double product = 1.0;
@@ -36,6 +45,9 @@ public class MyCalculator extends Calculator {
         return product;
     } //completed
 
+    /**
+     * Deletes all numbers which are less than zero from numbers list
+     */
     @Override
     public void deleteNegativeNumbers() {
         List<Number> numbers = this.getNumbers();
@@ -46,6 +58,11 @@ public class MyCalculator extends Calculator {
         }
     } //completed
 
+    /**
+     * Divides each element of numbers list into the divisor with saving the element type
+     * If element A is integer, then the result is x, x*divisor<=A
+     * @param divisor the divisor
+     */
     @Override
     public void divideBy(double divisor) {
         if (divisor==0.0){
@@ -59,7 +76,7 @@ public class MyCalculator extends Calculator {
             if (currentNumber instanceof BigInteger) {
                 BigDecimal currBigInt = new BigDecimal(((BigInteger)currentNumber));
                 BigDecimal divisorBigInt = new BigDecimal(strRepresentOfDivisor);
-                numbers.set(i, currBigInt.divide(divisorBigInt,RoundingMode.HALF_UP).toBigInteger());
+                numbers.set(i, currBigInt.divide(divisorBigInt,RoundingMode.HALF_DOWN).toBigInteger());
             } else if (currentNumber instanceof BigDecimal) {
                 BigDecimal currBigDec = (BigDecimal) currentNumber;
                 BigDecimal divisorBigDec = new BigDecimal(strRepresentOfDivisor);
@@ -80,6 +97,10 @@ public class MyCalculator extends Calculator {
         }
     } //completed
 
+    /**
+     * Substitute each element in numbers list into its square root with saving the type of the element
+     * If the number A is integer, than the result is  the biggest integer value x, x*x<=A
+     */
     @Override
     public void getSquareRoot() {
         try {
@@ -91,13 +112,13 @@ public class MyCalculator extends Calculator {
                     if (current.compareTo(BigInteger.ZERO) < 0) { // could be removed because current.sqrt() throws ArithmeticException if value < 0 since java 9 (exactly)
                         throw negativeValueException;
                     }
-                    this.getNumbers().set(i, current.sqrt());
+                    this.getNumbers().set(i, BigInteger.valueOf((long)Math.sqrt(current.doubleValue())));
                 } else if (currentNumber instanceof BigDecimal) { // we must store BigDecimal instance
                     BigDecimal current = (BigDecimal) currentNumber;
                     if (current.compareTo(BigDecimal.ZERO) < 0) {
                         throw negativeValueException;
                     }
-                    this.getNumbers().set(i, current.sqrt(MathContext.DECIMAL128));
+                    this.getNumbers().set(i, BigDecimal.valueOf(Math.sqrt(current.doubleValue())));
                 } else if (currentNumber instanceof Double) {
                     if (currentNumber.doubleValue() < 0.0) {
                         throw negativeValueException;
